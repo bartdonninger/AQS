@@ -6,6 +6,7 @@
 #include <Time.h>
 #include <TimeLib.h>
 #include <WiFiNINA.h>
+#include "arduino_secrets.h"
 
 
 // SHT31
