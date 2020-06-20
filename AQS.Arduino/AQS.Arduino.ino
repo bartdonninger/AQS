@@ -3,7 +3,6 @@
 #include "Adafruit_SHT31.h"
 #include "Adafruit_SGP30.h"
 #include <RTCZero.h>
-#include <Time.h>
 #include <TimeLib.h>
 #include <WiFiNINA.h>
 #include "arduino_secrets.h"
