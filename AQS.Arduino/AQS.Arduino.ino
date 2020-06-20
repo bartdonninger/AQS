@@ -1,4 +1,3 @@
-#include "arduino_secrets.h"
 #include <Arduino.h>
 #include <Wire.h>
 #include "Adafruit_SHT31.h"
@@ -56,7 +55,7 @@ void setup() {
   // Connect to SHT31 sensor
   if (!sht31.begin(0x44)) {   // Set to 0x45 for alternate i2c addr
     Serial.println("SHT31 sensor not found");
-    while (1) delay(1);
+    while (true) delay(1);
   }
   
   // Connect to SGP30 sensor
@@ -70,7 +69,7 @@ void setup() {
   
   // Check WiFi module status
   if (WiFi.status() == WL_NO_MODULE) {
-    Serial.println("Communication with WiFi module failed!");
+    Serial.println("WiFi module not found");
     while (true) delay(1);
   }
   
@@ -101,10 +100,11 @@ void setup() {
     numberOfTries++;
   }
   if (numberOfTries == maxTries) {
-    Serial.print("NTP unreachable!!");
-    while (1);
+    Serial.print("NTP unreachable");
+    while (true) delay(1);
   }
   else {
+    // Add 2 hours for UTC+1 and DST
     epoch += 7200;
     rtc.setEpoch(epoch);
   }
@@ -120,22 +120,7 @@ void loop() {
     // Save the current millis() value as the previous millis() value
     previousMillisSensors = currentMillis;
     
-    // Print date...
-    Serial.println(" ");
-    print2digits(rtc.getDay());
-    Serial.print("/");
-    print2digits(rtc.getMonth());
-    Serial.print("/");
-    print2digits(rtc.getYear());
-    Serial.print(" ");
-  
-    // ...and time
-    print2digits(rtc.getHours());
-    Serial.print(":");
-    print2digits(rtc.getMinutes());
-    Serial.print(":");
-    print2digits(rtc.getSeconds());
-    Serial.println(" ");
+    printDate();
     
     readSht31Sensor();
     
@@ -204,6 +189,26 @@ void getSgp30Baseline()
   Serial.print(" & TVOC: 0x"); Serial.println(TVOC_base, HEX);
 }
 
+
+void printDate()
+{
+  // Print date...
+    Serial.println(" ");
+    print2digits(rtc.getDay());
+    Serial.print("/");
+    print2digits(rtc.getMonth());
+    Serial.print("/");
+    print2digits(rtc.getYear());
+    Serial.print(" ");
+  
+    // ...and time
+    print2digits(rtc.getHours());
+    Serial.print(":");
+    print2digits(rtc.getMinutes());
+    Serial.print(":");
+    print2digits(rtc.getSeconds());
+    Serial.println(" ");
+}
 
 void print2digits(int number) {
   if (number < 10) {
