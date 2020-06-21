@@ -44,16 +44,12 @@ int status = WL_IDLE_STATUS;
 // Multitasking
 unsigned long previousMillisSensors(0);
 unsigned long previousMillisBaseline(0);
-const int intervalSensors(10000);
+const int intervalSensors(10);
 const int intervalBaseline(3600000);
-
+unsigned long sensorReadDuration(0);
 
 void setup() {
   Serial.begin(9600);
-  
-  // Wait for serial connection for direct USB connection devices
-  while (!Serial)
-    delay(10);
   
   // Connect to SHT31 sensor
   if (!sht31.begin(0x44)) {   // Set to 0x45 for alternate i2c addr
@@ -84,8 +80,6 @@ void setup() {
 
   // Attempt to connect to Wifi network:
   while (status != WL_CONNECTED) {
-    Serial.print("Attempting to connect to WPA SSID: ");
-    Serial.println(ssid);
     // Connect to WPA/WPA2 network:
     status = WiFi.begin(ssid, pass);
     // wait 10 seconds for connection:
@@ -111,6 +105,21 @@ void setup() {
     epoch += 7200;
     rtc.setEpoch(epoch);
   }
+
+  // Wait for serial connection for direct USB connection devices
+  while (!Serial)
+    delay(10);
+
+  // Set names for serial plotter
+  Serial.print("Temperature");
+  Serial.print(" ");
+  Serial.print("Humidity");
+  Serial.print(" ");
+  Serial.print("Total_VOC");
+  Serial.print(" ");
+  Serial.print("Equivalent_CO2");
+  Serial.print(" ");
+  Serial.println("Sensor_duration");
 }
 
 void loop() {
@@ -123,11 +132,14 @@ void loop() {
     // Save the current millis() value as the previous millis() value
     previousMillisSensors = currentMillis;
     
-    printDate();
+    // printDate();
     
     readSht31Sensor();
     
     readSgp30Sensor();
+
+    currentMillis = millis();
+    sensorReadDuration = currentMillis - previousMillisSensors;
   }
   
   // Determine if the interval has passed
@@ -138,6 +150,16 @@ void loop() {
     
     getSgp30Baseline();
   }
+  
+  Serial.print(temperature);
+  Serial.print(" ");
+  Serial.print(humidity);
+  Serial.print(" ");
+  Serial.print(tVOC);
+  Serial.print(" ");
+  Serial.print(eCO2);
+  Serial.print(" ");
+  Serial.println(sensorReadDuration);
 }
 
 
