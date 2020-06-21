@@ -15,6 +15,9 @@ float humidity(0.0);
 
 // SGP30
 Adafruit_SGP30 sgp30;
+uint16_t tVOC(0);
+uint16_t eCO2(0);
+
 
 /* return absolute humidity [mg/m^3] with approximation formula
 * @param temperature [°C]
@@ -142,18 +145,6 @@ void readSht31Sensor()
 {
   temperature = sht31.readTemperature();
   humidity = sht31.readHumidity();
-  
-  if (! isnan(temperature)) {  // check if 'is not a number'
-    Serial.print("Temperature =\t"); Serial.print(temperature); Serial.println(" C");
-  } else { 
-    Serial.println("Failed to read temperature");
-  }
-  
-  if (! isnan(humidity)) {  // check if 'is not a number'
-    Serial.print("Humidity =\t"); Serial.print(humidity); Serial.println(" %RH");
-  } else { 
-    Serial.println("Failed to read humidity");
-  }
 }
 
 
@@ -161,20 +152,10 @@ void readSgp30Sensor()
 {
   // If you have a temperature / humidity sensor, you can set the absolute humidity to enable the humditiy compensation for the air quality signals
   sgp30.setHumidity(getAbsoluteHumidity(temperature, humidity));
-  
-  if (! sgp30.IAQmeasure()) {
-    Serial.println("Measurement failed");
-    return;
-  }
-  Serial.print("TVOC =\t\t"); Serial.print(sgp30.TVOC); Serial.println(" ppb");
-  Serial.print("eCO2 =\t\t"); Serial.print(sgp30.eCO2); Serial.println(" ppm");
-
-  if (! sgp30.IAQmeasureRaw()) {
-    Serial.println("Raw Measurement failed");
-    return;
-  }
-  //Serial.print("Raw H2 "); Serial.print(sgp30.rawH2); Serial.print(" \t");
-  //Serial.print("Raw Ethanol "); Serial.print(sgp30.rawEthanol); Serial.println("");
+  // Perform measurement
+  sgp30.IAQmeasure();
+  tVOC = sgp30.TVOC;
+  eCO2 = sgp30.eCO2;
 }
 
 
