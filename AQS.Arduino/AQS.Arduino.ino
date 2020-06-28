@@ -44,15 +44,14 @@ int status = WL_IDLE_STATUS;
 // Multitasking
 unsigned long previousMillisSensors(0);
 unsigned long previousMillisBaseline(0);
-const int intervalSensors(10);
+const int intervalSensors(1000);
 const int intervalBaseline(3600000);
-unsigned long sensorReadDuration(0);
 
 void setup() {
   Serial.begin(9600);
   
-  // Connect to SHT31 sensor
-  if (!sht31.begin(0x44)) {   // Set to 0x45 for alternate i2c addr
+  // Connect to SHT31 sensor, set to 0x45 for alternate i2c address
+  if (!sht31.begin(0x44)) { 
     Serial.println("SHT31 sensor not found");
     while (true) delay(1);
   }
@@ -64,7 +63,7 @@ void setup() {
   }
 
   // If you have a baseline measurement from before you can assign it to start, to 'self-calibrate'
-  //sgp30.setIAQBaseline(0x8E68, 0x8F41);  // Will vary for each sensor!
+  //sgp30.setIAQBaseline(0x8E68, 0x8F41);
   
   // Check WiFi module status
   if (WiFi.status() == WL_NO_MODULE) {
@@ -72,9 +71,8 @@ void setup() {
     while (true) delay(1);
   }
   
-  // Check firmware version
-  String fv = WiFi.firmwareVersion();
-  if (fv < WIFI_FIRMWARE_LATEST_VERSION) {
+  // Check WiFi module firmware version
+  if (WiFi.firmwareVersion() < WIFI_FIRMWARE_LATEST_VERSION) {
     Serial.println("Please upgrade the firmware");
   }
 
@@ -83,7 +81,7 @@ void setup() {
     // Connect to WPA/WPA2 network:
     status = WiFi.begin(ssid, pass);
     // wait 10 seconds for connection:
-    delay(10000);
+    delay(5000);
   }
   
   // Initialize RTC
@@ -137,9 +135,6 @@ void loop() {
     readSht31Sensor();
     
     readSgp30Sensor();
-
-    currentMillis = millis();
-    sensorReadDuration = currentMillis - previousMillisSensors;
   }
   
   // Determine if the interval has passed
@@ -184,12 +179,7 @@ void readSgp30Sensor()
 void getSgp30Baseline()
 {
   uint16_t TVOC_base, eCO2_base;
-  if (! sgp30.getIAQBaseline(&eCO2_base, &TVOC_base)) {
-    Serial.println("Failed to get baseline readings");
-    return;
-  }
-  Serial.print("****Baseline values: eCO2: 0x"); Serial.print(eCO2_base, HEX);
-  Serial.print(" & TVOC: 0x"); Serial.println(TVOC_base, HEX);
+  sgp30.getIAQBaseline(&eCO2_base, &TVOC_base);
 }
 
 
