@@ -1,8 +1,8 @@
-﻿namespace AQS.Api.Reading.Domain
+﻿namespace AQS.Api.Reading.Domain.Models
 {
     public enum ReadingType
     {
-        Temprature,
+        Temperature,
         Humidity,
         AirQuality
     }

@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Text;
 
-namespace AQS.Api.Reading.Requests
+namespace AQS.Api.Reading.Domain.Dtos
 {
-    public class AddReadingRequest
+    public class ReadingDto
     {
         public Guid DeviceId { get; set; }
         public string ReadingType { get; set; }

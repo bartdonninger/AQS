@@ -1,11 +1,9 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 
-namespace AQS.Api.Reading.Domain
+namespace AQS.Api.Reading.Domain.Models
 {
     public class BaseEntity
     {
-        [Key]
         public Guid Id { get; set; }
         public DateTime CreatedDateUtc { get; set; }
         public DateTime UpdatedDateUtc { get; set; }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
-using AQS.Api.Reading.Domain;
+using AQS.Api.Reading.DataAccess.Configurations;
+using AQS.Api.Reading.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace AQS.Api.Reading.DataAccess
@@ -9,7 +10,14 @@ namespace AQS.Api.Reading.DataAccess
     {
         public ReadingContext(DbContextOptions<ReadingContext> options) : base (options) { }
 
-        public DbSet<Domain.Reading> Readings { get; set; }
+        public DbSet<Domain.Models.Reading> Readings { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfiguration(new ReadingConfiguration());
+
+            base.OnModelCreating(modelBuilder);
+        }
 
         public override int SaveChanges()
         {

@@ -5,9 +5,11 @@ VisualStudioVersion = 16.0.30225.117
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AQS.Api.Reading", "AQS.Api.Reading\AQS.Api.Reading.csproj", "{FB0BCC11-132A-41E6-92D2-1785737D5D2C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AQS.Api.Reading.Domain", "AQS.Reading.Domain\AQS.Api.Reading.Domain.csproj", "{1EC120F8-A22D-47F0-82E3-A08AA30DA141}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AQS.Api.Reading.Domain", "AQS.Reading.Domain\AQS.Api.Reading.Domain.csproj", "{1EC120F8-A22D-47F0-82E3-A08AA30DA141}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AQS.Api.Reading.DataAccess", "AQS.Api.Reading.DataAccess\AQS.Api.Reading.DataAccess.csproj", "{DEBEB7DB-E1F7-440F-BAFA-4EE8C52FB098}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AQS.Api.Reading.DataAccess", "AQS.Api.Reading.DataAccess\AQS.Api.Reading.DataAccess.csproj", "{DEBEB7DB-E1F7-440F-BAFA-4EE8C52FB098}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AQS.Api.Reading.Services", "AQS.Api.Reading.Services\AQS.Api.Reading.Services.csproj", "{7648D16A-1AB4-42B5-80DE-CD3F914C0F7E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{DEBEB7DB-E1F7-440F-BAFA-4EE8C52FB098}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DEBEB7DB-E1F7-440F-BAFA-4EE8C52FB098}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DEBEB7DB-E1F7-440F-BAFA-4EE8C52FB098}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7648D16A-1AB4-42B5-80DE-CD3F914C0F7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7648D16A-1AB4-42B5-80DE-CD3F914C0F7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7648D16A-1AB4-42B5-80DE-CD3F914C0F7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7648D16A-1AB4-42B5-80DE-CD3F914C0F7E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

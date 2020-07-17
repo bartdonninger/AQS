@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.0.0" />
+    <PackageReference Include="MediatR" Version="8.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AQS.Api.Reading.DataAccess\AQS.Api.Reading.DataAccess.csproj" />
+    <ProjectReference Include="..\AQS.Reading.Domain\AQS.Api.Reading.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

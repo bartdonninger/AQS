@@ -1,5 +1,10 @@
-﻿using System.Net;
-using AQS.Api.Reading.Requests;
+﻿using System;
+using System.Net;
+using System.Threading.Tasks;
+using AQS.Api.Reading.DataAccess;
+using AQS.Api.Reading.Domain.Commands;
+using AQS.Api.Reading.Domain.Dtos;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -9,12 +14,13 @@ namespace AQS.Api.Reading.Controllers
     [ApiController]
     public class ReadingController : ControllerBase
     {
-
         private readonly ILogger<ReadingController> _logger;
+        private readonly IMediator _mediator;
 
-        public ReadingController(ILogger<ReadingController> logger)
+        public ReadingController(ILogger<ReadingController> logger, IMediator mediator, ReadingContext context)
         {
             _logger = logger;
+            _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
 
         [HttpGet]
@@ -24,13 +30,15 @@ namespace AQS.Api.Reading.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType((int)HttpStatusCode.Created)]
+        [ProducesResponseType(typeof(ReadingDto), (int)HttpStatusCode.Created)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public string Get([FromBody] AddReadingRequest addReadingRequest)
+        public async Task<ActionResult<ReadingDto>> Create([FromBody] CreateReadingCommand addReadingRequest)
         {
-            // Todo: save request to database (repository pattern or cqrs?)
+            var readingDto = await _mediator.Send(addReadingRequest);
 
-            return "tester de test tweemaal";
+            _logger.LogDebug("Reading created");
+
+            return Created("bla",readingDto);
         }
     }
 }
