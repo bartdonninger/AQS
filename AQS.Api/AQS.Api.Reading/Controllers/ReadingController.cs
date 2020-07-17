@@ -26,6 +26,7 @@ namespace AQS.Api.Reading.Controllers
         [HttpGet]
         public string Get()
         {
+            // Todo: return readings
             return "tester de test tweemaal";
         }
 
@@ -38,6 +39,7 @@ namespace AQS.Api.Reading.Controllers
 
             _logger.LogDebug("Reading created");
 
+            // Todo: What kind of location is required with the Created HTTP status?
             return Created("bla",readingDto);
         }
     }
