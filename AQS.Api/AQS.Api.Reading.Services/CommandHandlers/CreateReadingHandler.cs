@@ -25,6 +25,7 @@ namespace AQS.Api.Reading.Services.CommandHandlers
             var reading = new Domain.Models.Reading(command.DeviceId, command.ReadingType, command.Value);
 
              _readingContext.Readings.Add(reading);
+             _readingContext.SaveChanges();
 
             return Task.FromResult(_readingMapper.MapReadingDto(reading));
         }
