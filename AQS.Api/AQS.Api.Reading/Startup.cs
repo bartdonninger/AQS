@@ -66,7 +66,7 @@ namespace AQS.Api.Reading
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Reading API V1");
             });
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
 
