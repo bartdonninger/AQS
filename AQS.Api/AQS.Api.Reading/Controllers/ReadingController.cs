@@ -25,13 +25,19 @@ namespace AQS.Api.Reading.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<ReadingDto>), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<IEnumerable<ReadingDto>>> Get([FromQuery]GetReadingsQuery getReadingsQuery)
+        public ActionResult<string> Get()
         {
-            var readingDtos = await _mediator.Send(getReadingsQuery);
-            
-            return Ok(readingDtos);
+            return "test";
         }
+
+        //[HttpGet]
+        //[ProducesResponseType(typeof(IEnumerable<ReadingDto>), (int)HttpStatusCode.OK)]
+        //public async Task<ActionResult<IEnumerable<ReadingDto>>> Get([FromQuery]GetReadingsQuery getReadingsQuery)
+        //{
+        //    var readingDtos = await _mediator.Send(getReadingsQuery);
+            
+        //    return Ok(readingDtos);
+        //}
 
         [HttpPost]
         [ProducesResponseType(typeof(ReadingDto), (int)HttpStatusCode.Created)]
