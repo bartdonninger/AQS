@@ -6,7 +6,10 @@
 #include <TimeLib.h>
 #include <WiFiNINA.h>
 #include "arduino_secrets.h"
+#include <ArduinoHttpClient.h>
+#include <Reading.h>
 
+Reading reading1("a", 0, "38");
 
 // SHT31
 Adafruit_SHT31 sht31 = Adafruit_SHT31();
@@ -44,8 +47,16 @@ int status = WL_IDLE_STATUS;
 // Multitasking
 unsigned long previousMillisSensors(0);
 unsigned long previousMillisBaseline(0);
-const int intervalSensors(1000);
+const int intervalSensors(10000);
 const int intervalBaseline(3600000);
+
+// AQS Api
+char serverAddress[] = "192.168.178.60";
+int serverPort = 32769;
+char aqsDeviceId[] = "3FA85F64-5717-4562-B3FC-2C963F66AFA6";
+
+WiFiClient wifi;
+HttpClient client = HttpClient(wifi, serverAddress, serverPort);
 
 void setup() {
   Serial.begin(9600);
@@ -57,10 +68,10 @@ void setup() {
   }
   
   // Connect to SGP30 sensor
-  if (!sgp30.begin()){
-    Serial.println("SGP30 sensor not found");
-    while (true) delay(1);
-  }
+//  if (!sgp30.begin()){
+//    Serial.println("SGP30 sensor not found");
+//    while (true) delay(1);
+//  }
 
   // If you have a baseline measurement from before you can assign it to start, to 'self-calibrate'
   //sgp30.setIAQBaseline(0x8E68, 0x8F41);
@@ -108,16 +119,14 @@ void setup() {
   while (!Serial)
     delay(10);
 
-  // Set names for serial plotter
-  Serial.print("Temperature");
-  Serial.print(" ");
-  Serial.print("Humidity");
-  Serial.print(" ");
-  Serial.print("Total_VOC");
-  Serial.print(" ");
-  Serial.print("Equivalent_CO2");
-  Serial.print(" ");
-  Serial.println("Sensor_duration");
+  // print the SSID of the network you're attached to:
+  Serial.print("SSID: ");
+  Serial.println(WiFi.SSID());
+
+  // print your WiFi shield's IP address:
+  IPAddress ip = WiFi.localIP();
+  Serial.print("IP Address: ");
+  Serial.println(ip);
 }
 
 void loop() {
@@ -129,32 +138,49 @@ void loop() {
   {
     // Save the current millis() value as the previous millis() value
     previousMillisSensors = currentMillis;
-    
-    // printDate();
-    
+
     readSht31Sensor();
+
+    Serial.println("making POST request");
+    String contentType = "application/json";
+    String postData = "{\"deviceId\": \"3FA85F64-5717-4562-B3FC-2C963F66AFA6\", \"readingType\": 0, \"value\": \"38\"}";
+
+    Serial.println(postData);
     
-    readSgp30Sensor();
+    client.post("/api/reading", contentType, postData);
+    //client.get("/api/reading");
+
+    // read the status code and body of the response
+    int statusCode = client.responseStatusCode();
+    String response = client.responseBody();
+  
+    Serial.print("Status code: ");
+    Serial.println(statusCode);
+    Serial.print("Response: ");
+    Serial.println(response);
+
+    Serial.println("Wait ten seconds");
+    delay(10000);
   }
   
   // Determine if the interval has passed
-  if (currentMillis - previousMillisBaseline > intervalBaseline )
-  {
-    // Save the current millis() value as the previous millis() value
-    previousMillisBaseline = currentMillis;
-    
-    getSgp30Baseline();
-  }
+//  if (currentMillis - previousMillisBaseline > intervalBaseline )
+//  {
+//    // Save the current millis() value as the previous millis() value
+//    previousMillisBaseline = currentMillis;
+//    
+//    getSgp30Baseline();
+//  }
   
-  Serial.print(temperature);
-  Serial.print(" ");
-  Serial.print(humidity);
-  Serial.print(" ");
-  Serial.print(tVOC);
-  Serial.print(" ");
-  Serial.print(eCO2);
-  Serial.print(" ");
-  Serial.println(sensorReadDuration);
+//  Serial.print(temperature);
+//  Serial.print(" ");
+//  Serial.print(humidity);
+//  Serial.print(" ");
+//  Serial.print(tVOC);
+//  Serial.print(" ");
+//  Serial.print(eCO2);
+  //Serial.print(" ");
+  //Serial.println(intervalSensors);
 }
 
 
