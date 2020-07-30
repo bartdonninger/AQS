@@ -48,6 +48,36 @@ void setup() {
 }
 
 void loop() {
+  String postData = "{\"title\": \"foo\",\"body\": \"bar\",\"userId\": 1}";
+
+  Serial.println("making POST request");
+  // if you get a connection, report back via serial:
+  if (wifi.connect(server, port)) {
+    Serial.println("connected to server");
+    // Make a HTTP request:
+    wifi.println("POST /posts/ HTTP/1.1");
+    wifi.print("Host: ");
+    wifi.println(server);
+    wifi.println("Accept: */*");
+    wifi.print("Content-Length: ");
+    wifi.println(postData.length());
+    wifi.println("Content-Type: application/json; charset=UTF-8");
+    wifi.println("Connection: close");
+    wifi.println();
+    wifi.println(postData);
+  }
+
+  // if there are incoming bytes available
+  // from the server, read them and print them:
+  while (wifi.available()) {
+    char c = wifi.read();
+    Serial.write(c);
+  }
+
+  Serial.println("Wait 5 seconds");
+  delay(5000);
+  
+  /*
   Serial.println("making POST request");
   String postData = "{\"title\": \"foo\",\"body\": \"bar\",\"userId\": 1}";
 
@@ -69,4 +99,5 @@ void loop() {
 
   Serial.println("Wait five seconds");
   delay(5000);
+  */
 }
