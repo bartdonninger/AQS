@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Animals
 {
@@ -9,10 +10,12 @@ namespace Animals
         {
             var animals = new List<IAnimal>();
 
-            animals.Add(new Dog { name_ = "Bart", bark_ = "Wooooof!" });
-            animals.Add(new Dog { name_ = "Woytek", bark_ = "Wroof!" });
-            animals.Add(new Cat { name_ = "Robin"});
+            animals.Add(new Dog { name_ = "Bart", sexMale_ = true, bark_ = "Wooooof!" });
+            animals.Add(new Dog { name_ = "Woytek", sexMale_ = true, bark_ = "Wroof!" });
+            animals.Add(new Cat { name_ = "Robin", sexMale_ = false});
 
+            PrintAnimals(animals);
+            animals.First(item => item.name_ == "Robin").Brush();
             PrintAnimals(animals);
         }
 
@@ -20,7 +23,17 @@ namespace Animals
         {
             foreach (IAnimal animal in animals)
             {
-                Console.WriteLine("Here is {0}: {1}", animal.name_, animal.Talk());
+                string brushedString;
+                if (animal.brushed_)
+                {
+                    brushedString = "brushed";
+                }
+                else
+                {
+                    brushedString = "not brushed";
+                }
+
+                Console.WriteLine("{0} says: {1}, is {2} and is {3}", animal.name_, animal.Talk(), animal.GetSex(), brushedString);
             }
         }
     }
